@@ -9,7 +9,7 @@ type Formatter interface {
 	Format(format string, args ...interface{}) string
 }
 
-var DefaultFormatter Formatter = NewTimeFormatter("2006-01-02 15:04:05.000 07:00", false)
+var DefaultFormatter Formatter = NewTimeFormatter("2006-01-02 15:04:05.000 -07:00", false)
 
 type TimeFormatter struct {
 	TimeFormat string
