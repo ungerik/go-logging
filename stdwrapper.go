@@ -1,24 +1,29 @@
 package logging
 
 import (
+	"fmt"
 	"log"
 )
 
 type StdWrapper struct {
-	logger *log.Logger
-	debug  bool
+	stdLogger *log.Logger
+	debug     bool
 }
 
-func NewStdWrapper(logger *log.Logger, debug bool) *StdWrapper {
-	return &StdWrapper{logger, debug}
+func NewStdWrapper(stdLogger *log.Logger, debug bool) *StdWrapper {
+	return &StdWrapper{stdLogger, debug}
 }
 
-func (wrapper *StdWrapper) Printf(format string, args ...interface{}) {
-	wrapper.logger.Printf(format, args...)
+func (wrapper *StdWrapper) Printf(msg string, v ...interface{}) {
+	wrapper.stdLogger.Printf(msg, v...)
 }
 
-func (wrapper *StdWrapper) Debug(format string, args ...interface{}) {
+func (wrapper *StdWrapper) Debug(msg string, v ...interface{}) {
 	if wrapper.debug {
-		wrapper.logger.Printf(format, args...)
+		wrapper.stdLogger.Printf(msg, v...)
 	}
+}
+
+func (wrapper *StdWrapper) UnresolvedErrorf(err error, msg string, v ...interface{}) {
+	wrapper.stdLogger.Printf("%s: %+v", fmt.Sprintf(msg, v...), err)
 }

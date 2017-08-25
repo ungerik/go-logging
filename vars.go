@@ -5,14 +5,22 @@ type Vars struct {
 	DebugVar  *bool
 }
 
-func (v *Vars) Printf(format string, args ...interface{}) {
-	if v.LoggerVar != nil && *v.LoggerVar != nil {
-		(*v.LoggerVar).Printf(format, args...)
+func (vars *Vars) Printf(msg string, v ...interface{}) {
+	if vars.LoggerVar != nil && *vars.LoggerVar != nil {
+		(*vars.LoggerVar).Printf(msg, v...)
 	}
 }
 
-func (v *Vars) Debugf(format string, args ...interface{}) {
-	if v.LoggerVar != nil && *v.LoggerVar != nil && v.DebugVar != nil && *v.DebugVar {
-		(*v.LoggerVar).Debugf(format, args...)
+func (vars *Vars) Debugf(msg string, v ...interface{}) {
+	if vars.LoggerVar != nil && *vars.LoggerVar != nil && vars.DebugVar != nil && *vars.DebugVar {
+		(*vars.LoggerVar).Debugf(msg, v...)
 	}
 }
+
+func (vars *Vars) UnresolvedErrorf(err error, msg string, v ...interface{}) {
+	if vars.LoggerVar != nil && *vars.LoggerVar != nil {
+		(*vars.LoggerVar).UnresolvedErrorf(err, msg, v...)
+	}
+}
+
+

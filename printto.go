@@ -23,16 +23,22 @@ func NewPrintTo(writer io.Writer, debug bool, formatter Formatter) *PrintTo {
 	return &PrintTo{writer: writer, debug: debug, formatter: formatter}
 }
 
-func (printTo *PrintTo) Printf(format string, args ...interface{}) {
+func (printTo *PrintTo) Printf(msg string, v ...interface{}) {
 	printTo.mutex.Lock()
 	defer printTo.mutex.Unlock()
-	fmt.Fprintln(printTo.writer, printTo.formatter.Format(format, args...))
+	fmt.Fprintln(printTo.writer, printTo.formatter.Format(msg, v...))
 }
 
-func (printTo *PrintTo) Debugf(format string, args ...interface{}) {
+func (printTo *PrintTo) Debugf(msg string, v ...interface{}) {
 	if printTo.debug {
 		printTo.mutex.Lock()
 		defer printTo.mutex.Unlock()
-		fmt.Fprintln(printTo.writer, printTo.formatter.Format(format, args...))
+		fmt.Fprintln(printTo.writer, printTo.formatter.Format(msg, v...))
 	}
+}
+
+func (printTo *PrintTo) UnresolvedErrorf(err error, msg string, v ...interface{}) {
+	printTo.mutex.Lock()
+	defer printTo.mutex.Unlock()
+	fmt.Fprintln(printTo.writer, printTo.formatter.FormatError(err, msg, v...))
 }

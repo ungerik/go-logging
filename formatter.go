@@ -6,7 +6,8 @@ import (
 )
 
 type Formatter interface {
-	Format(format string, args ...interface{}) string
+	Format(msg string, v ...interface{}) string
+	FormatError(err error, msg string, v ...interface{}) string
 }
 
 var DefaultFormatter Formatter = NewTimeFormatter("2006-01-02 15:04:05.000 -07:00", false)
@@ -20,10 +21,18 @@ func NewTimeFormatter(timeFormat string, utc bool) *TimeFormatter {
 	return &TimeFormatter{TimeFormat: timeFormat, UTC: utc}
 }
 
-func (f *TimeFormatter) Format(format string, args ...interface{}) string {
+func (f *TimeFormatter) Format(msg string, v ...interface{}) string {
 	t := time.Now()
 	if f.UTC {
 		t = t.UTC()
 	}
-	return t.Format(f.TimeFormat) + " " + fmt.Sprintf(format, args...)
+	return t.Format(f.TimeFormat) + " " + fmt.Sprintf(msg, v...)
+}
+
+func (f *TimeFormatter) FormatError(err error, msg string, v ...interface{}) string {
+	t := time.Now()
+	if f.UTC {
+		t = t.UTC()
+	}
+	return fmt.Sprintf("%s %s: %+v", t.Format(f.TimeFormat), fmt.Sprintf(msg, v...), err)
 }
