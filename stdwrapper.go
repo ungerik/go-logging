@@ -19,9 +19,10 @@ func (wrapper *StdWrapper) Printf(msg string, v ...interface{}) {
 }
 
 func (wrapper *StdWrapper) Debug(msg string, v ...interface{}) {
-	if wrapper.debug {
-		wrapper.stdLogger.Printf(msg, v...)
+	if !wrapper.debug {
+		return
 	}
+	wrapper.stdLogger.Printf(msg, v...)
 }
 
 func (wrapper *StdWrapper) UnresolvedErrorf(err error, msg string, v ...interface{}) {

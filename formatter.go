@@ -7,10 +7,9 @@ import (
 
 type Formatter interface {
 	Format(msg string, v ...interface{}) string
+	FormatDebug(msg string, v ...interface{}) string
 	FormatError(err error, msg string, v ...interface{}) string
 }
-
-var DefaultFormatter Formatter = NewTimeFormatter("2006-01-02 15:04:05.000 -07:00", false)
 
 type TimeFormatter struct {
 	TimeFormat string
@@ -27,6 +26,10 @@ func (f *TimeFormatter) Format(msg string, v ...interface{}) string {
 		t = t.UTC()
 	}
 	return t.Format(f.TimeFormat) + " " + fmt.Sprintf(msg, v...)
+}
+
+func (f *TimeFormatter) FormatDebug(msg string, v ...interface{}) string {
+	return f.Format(msg, v...)
 }
 
 func (f *TimeFormatter) FormatError(err error, msg string, v ...interface{}) string {
