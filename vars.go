@@ -22,5 +22,3 @@ func (vars *Vars) UnresolvedErrorf(err error, msg string, v ...interface{}) {
 		(*vars.LoggerVar).UnresolvedErrorf(err, msg, v...)
 	}
 }
-
-
